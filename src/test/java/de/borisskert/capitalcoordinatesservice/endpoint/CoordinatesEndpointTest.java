@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -29,7 +30,10 @@ class CoordinatesEndpointTest {
 
     @Test
     void shouldReturnBerlinWhenRequestingCapitalsCoordinatesForDe() throws Exception {
-        when()
+        given()
+                .auth().basic("test_user", "test_password123")
+
+                .when()
                 .get("/coordinates/DE")
 
                 .then()
@@ -39,6 +43,15 @@ class CoordinatesEndpointTest {
                         "longitude", equalTo(13.3888599),
                         "country", equalTo("Deutschland"),
                         "display_name", equalTo("Berlin, Deutschland"));
+    }
+
+    @Test
+    void shouldReturnUnauthorizedWhenRequestingWithoutAuthentication() {
+        when()
+                .get("/coordinates/DE")
+
+                .then()
+                .statusCode(401);
     }
 
     private void setupServiceMock() {
