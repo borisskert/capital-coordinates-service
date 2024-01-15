@@ -1,8 +1,8 @@
 package de.borisskert.capitalcoordinatesservice.endpoint;
 
-import de.borisskert.capitalcoordinatesservice.service.CapitalCoordinatesService;
 import de.borisskert.capitalcoordinatesservice.model.CapitalWithCoordinates;
 import de.borisskert.capitalcoordinatesservice.model.CountryCode;
+import de.borisskert.capitalcoordinatesservice.service.CapitalCoordinatesService;
 import io.restassured.RestAssured;
 import io.restassured.config.JsonConfig;
 import io.restassured.path.json.config.JsonPathConfig;
@@ -52,6 +52,30 @@ class CoordinatesEndpointTest {
 
                 .then()
                 .statusCode(401);
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenRequestingForIllegalCountryCode() {
+        given()
+                .auth().basic("test_user", "test_password123")
+
+                .when()
+                .get("/coordinates/XX")
+
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenCountryCodeIsMissing() {
+        given()
+                .auth().basic("test_user", "test_password123")
+
+                .when()
+                .get("/coordinates")
+
+                .then()
+                .statusCode(400);
     }
 
     private void setupServiceMock() {
