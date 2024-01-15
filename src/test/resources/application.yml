@@ -3,3 +3,7 @@ spring:
     user:
       name: test_user
       password: test_password123
+
+capital-coordinates-service:
+  city-location-client:
+    url: "https://nominatim.openstreetmap.org/search?q={capitalCity}&format=json&limit=1"
