@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  capital-coordinates-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: capital-coordinates-service
+    container_name: capital-coordinates-service
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_SECURITY_USER_NAME=docker_user
+      - SPRING_SECURITY_USER_PASSWORD=docker_password
