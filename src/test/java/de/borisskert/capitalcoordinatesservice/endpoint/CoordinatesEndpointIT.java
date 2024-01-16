@@ -1,17 +1,11 @@
 package de.borisskert.capitalcoordinatesservice.endpoint;
 
-import de.borisskert.capitalcoordinatesservice.client.CountryInfoClient;
-import de.borisskert.capitalcoordinatesservice.model.CityWithLocation;
-import de.borisskert.capitalcoordinatesservice.model.CountryCode;
-import de.borisskert.capitalcoordinatesservice.service.CapitalCoordinatesService;
 import io.restassured.RestAssured;
 import io.restassured.config.JsonConfig;
 import io.restassured.path.json.config.JsonPathConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
 import static io.restassured.RestAssured.given;
@@ -19,22 +13,18 @@ import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ActiveProfiles("test")
-class CoordinatesEndpointTest {
-
-    @MockBean
-    CapitalCoordinatesService mockedService;
+@ActiveProfiles("IT")
+public class CoordinatesEndpointIT {
 
     @BeforeEach
     void setup() {
         setupRestAssured();
-        setupServiceMock();
     }
 
     @Test
     void shouldReturnBerlinWhenRequestingCapitalsCoordinatesForDe() throws Exception {
         given()
-                .auth().basic("test_user", "test_password123")
+                .auth().basic("test_user_IT", "SvRYuE7VqT5tb3LC6DanWB")
 
                 .when()
                 .get("/coordinates/DE")
@@ -45,13 +35,32 @@ class CoordinatesEndpointTest {
                         "latitude", equalTo(52.5170365),
                         "longitude", equalTo(13.3888599),
                         "country", equalTo("Deutschland"),
-                        "display_name", equalTo("Berlin, Deutschland"));
+                        "display_name", equalTo("Berlin, Deutschland")
+                );
     }
 
     @Test
-    void shouldRespondBadRequestWhenRequestingCapitalsCoordinatesForFormerYugoslaviaWhichCannotBeFound() throws Exception {
+    void shouldReturnZagrebWhenRequestingCapitalsCoordinatesForHr() throws Exception {
         given()
-                .auth().basic("test_user", "test_password123")
+                .auth().basic("test_user_IT", "SvRYuE7VqT5tb3LC6DanWB")
+
+                .when()
+                .get("/coordinates/HR")
+
+                .then()
+                .statusCode(200)
+                .body("capital", equalTo("Zagreb"),
+                        "latitude", equalTo(45.8130967),
+                        "longitude", equalTo(15.9772795),
+                        "country", equalTo("Kroatien"),
+                        "display_name", equalTo("Stadt Zagreb, Kroatien")
+                );
+    }
+
+    @Test
+    void shouldReturnBadRequestForFormerYugoslavia() throws Exception {
+        given()
+                .auth().basic("test_user_IT", "SvRYuE7VqT5tb3LC6DanWB")
 
                 .when()
                 .get("/coordinates/YU")
@@ -61,18 +70,9 @@ class CoordinatesEndpointTest {
     }
 
     @Test
-    void shouldReturnUnauthorizedWhenRequestingWithoutAuthentication() {
-        when()
-                .get("/coordinates/DE")
-
-                .then()
-                .statusCode(401);
-    }
-
-    @Test
-    void shouldReturnBadRequestWhenRequestingForIllegalCountryCode() {
+    void shouldReturnBadRequestForIllegalCountryCoide() throws Exception {
         given()
-                .auth().basic("test_user", "test_password123")
+                .auth().basic("test_user_IT", "SvRYuE7VqT5tb3LC6DanWB")
 
                 .when()
                 .get("/coordinates/XX")
@@ -82,9 +82,9 @@ class CoordinatesEndpointTest {
     }
 
     @Test
-    void shouldReturnBadRequestWhenCountryCodeIsMissing() {
+    void shouldReturnBadRequestWhenCountryCodeIsMissing() throws Exception {
         given()
-                .auth().basic("test_user", "test_password123")
+                .auth().basic("test_user_IT", "SvRYuE7VqT5tb3LC6DanWB")
 
                 .when()
                 .get("/coordinates")
@@ -93,20 +93,13 @@ class CoordinatesEndpointTest {
                 .statusCode(400);
     }
 
-    private void setupServiceMock() {
-        CountryCode deutschland = CountryCode.from("DE");
-        CityWithLocation berlin = new CityWithLocation(
-                "Berlin",
-                52.5170365,
-                13.3888599,
-                "Deutschland",
-                "Berlin, Deutschland"
-        );
+    @Test
+    void shouldRespondUnauthorizedWhenBasicAuthIsMissing() throws Exception {
+        when()
+                .get("/coordinates/DE")
 
-        Mockito.when(mockedService.findBy(deutschland)).thenReturn(berlin);
-
-        CountryCode formerYugoslavia = CountryCode.from("YU");
-        Mockito.when(mockedService.findBy(formerYugoslavia)).thenThrow(new CountryInfoClient.CountryNotFoundException("No country found for code 'YU'"));
+                .then()
+                .statusCode(401);
     }
 
     /**

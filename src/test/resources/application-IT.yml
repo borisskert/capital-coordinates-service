@@ -1,0 +1,5 @@
+spring:
+  security:
+    user:
+      name: test_user_IT
+      password: SvRYuE7VqT5tb3LC6DanWB
