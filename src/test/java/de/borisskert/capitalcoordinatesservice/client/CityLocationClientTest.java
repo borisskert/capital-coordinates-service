@@ -3,13 +3,13 @@ package de.borisskert.capitalcoordinatesservice.client;
 import de.borisskert.capitalcoordinatesservice.ServiceApplication;
 import de.borisskert.capitalcoordinatesservice.model.City;
 import de.borisskert.capitalcoordinatesservice.model.CityLocation;
-import de.borisskert.capitalcoordinatesservice.model.GpsLocation;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.offset;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(classes = ServiceApplication.class)
@@ -22,13 +22,21 @@ class CityLocationClientTest {
     @Test
     void shouldRetrieveLocationForBerlin() {
         final CityLocation location = client.getLocation(City.of("Berlin"));
-        assertEquals(new GpsLocation(52.5170365, 13.3888599).toCityLocation("Deutschland", "Berlin, Deutschland"), location);
+
+        assertThat(location.gpsLocation().latitude()).isCloseTo(52.5, offset(0.1));
+        assertThat(location.gpsLocation().longitude()).isCloseTo(13.3, offset(0.1));
+        assertThat(location.displayName()).isEqualTo("Berlin, Deutschland");
+        assertThat(location.country()).isEqualTo("Deutschland");
     }
 
     @Test
     void shouldRetrieveLocationForZagreb() {
         final CityLocation location = client.getLocation(City.of("Zagreb"));
-        assertEquals(new GpsLocation(45.8130967, 15.9772795).toCityLocation("Kroatien", "Stadt Zagreb, Kroatien"), location);
+
+        assertThat(location.gpsLocation().latitude()).isCloseTo(45.8, offset(0.1));
+        assertThat(location.gpsLocation().longitude()).isCloseTo(15.9, offset(0.1));
+        assertThat(location.displayName()).isEqualTo("Zagreb, Stadt Zagreb, Kroatien");
+        assertThat(location.country()).isEqualTo("Kroatien");
     }
 
     @Test

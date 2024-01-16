@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest(classes = ServiceApplication.class)
 @ActiveProfiles("test")
@@ -21,14 +21,14 @@ class CountryInfoClientTest {
     @Test
     void shouldGetBerlinForGermanyCountryCode() {
         City city = client.getCapitalCity(new CountryCode("DE"));
-        assertEquals("Berlin", city.name());
+        assertThat(city.name()).isEqualTo("Berlin");
     }
 
     @Test
     void shouldThrowWhenTryingToFindCapitalOfNotExistingCountry() {
-        assertThrows(CountryInfoClient.CountryNotFoundException.class, () -> {
+        assertThatThrownBy(() -> {
             client.getCapitalCity(new CountryCode("XX"));
-        });
+        }).isInstanceOf(CountryInfoClient.CountryNotFoundException.class);
     }
 
 }

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.offset;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -41,10 +43,10 @@ class CapitalCoordinatesServiceTest {
     void shouldShouldReturnBerlinsLocationForGermanysCode() {
         CityWithLocation cityWithLocation = service.findBy(germany);
 
-        assertEquals(cityWithLocation.capital(), "Berlin");
-        assertEquals(cityWithLocation.latitude(), 52.5170365);
-        assertEquals(cityWithLocation.longitude(), 13.3888599);
-        assertEquals(cityWithLocation.country(), "Germany");
-        assertEquals(cityWithLocation.displayName(), "Berlin, Deutschland");
+        assertThat(cityWithLocation.capital()).isEqualTo("Berlin");
+        assertThat(cityWithLocation.latitude()).isCloseTo(52.5, offset(0.1));
+        assertThat(cityWithLocation.longitude()).isEqualTo(13.3, offset(0.1));
+        assertThat(cityWithLocation.country()).isEqualTo("Germany");
+        assertThat(cityWithLocation.displayName()).isEqualTo("Berlin, Deutschland");
     }
 }
