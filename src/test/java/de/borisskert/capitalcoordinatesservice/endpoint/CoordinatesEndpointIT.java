@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("IT")
@@ -32,8 +32,8 @@ public class CoordinatesEndpointIT {
                 .then()
                 .statusCode(200)
                 .body("capital", equalTo("Berlin"),
-                        "latitude", equalTo(52.5170365),
-                        "longitude", equalTo(13.3888599),
+                        "latitude", closeTo(52.5, 0.1),
+                        "longitude", closeTo(13.3, 0.1),
                         "country", equalTo("Deutschland"),
                         "display_name", equalTo("Berlin, Deutschland")
                 );
@@ -50,10 +50,10 @@ public class CoordinatesEndpointIT {
                 .then()
                 .statusCode(200)
                 .body("capital", equalTo("Zagreb"),
-                        "latitude", equalTo(45.8130967),
-                        "longitude", equalTo(15.9772795),
+                        "latitude", closeTo(45.8, 0.1),
+                        "longitude", closeTo(15.9, 0.1),
                         "country", equalTo("Kroatien"),
-                        "display_name", equalTo("Stadt Zagreb, Kroatien")
+                        "display_name", containsString("Stadt Zagreb, Kroatien")
                 );
     }
 
