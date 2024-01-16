@@ -1,6 +1,6 @@
 package de.borisskert.capitalcoordinatesservice.client;
 
-import de.borisskert.capitalcoordinatesservice.model.CapitalCity;
+import de.borisskert.capitalcoordinatesservice.model.City;
 import de.borisskert.capitalcoordinatesservice.model.CountryCode;
 import org.oorsprong.webservices.websamples.countryinfo.CountryInfoServiceSoapType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class CountryInfoClient {
         this.countryInfoServiceSoapType = countryInfoServiceSoapType;
     }
 
-    public CapitalCity getCapitalCity(CountryCode countryCode) {
+    public City getCapitalCity(CountryCode countryCode) {
         String capitalCity = countryInfoServiceSoapType.capitalCity(countryCode.value());
 
         // SOAP service does not throw an exception nor return null when country code is not found - it returns a string
@@ -25,7 +25,7 @@ public class CountryInfoClient {
             throw new CountryNotFoundException("Could not find capital city for country code '" + countryCode.value() + "'");
         }
 
-        return new CapitalCity(capitalCity);
+        return new City(capitalCity);
     }
 
     public static class CountryNotFoundException extends RuntimeException {

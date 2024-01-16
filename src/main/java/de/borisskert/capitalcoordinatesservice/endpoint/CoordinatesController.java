@@ -1,6 +1,6 @@
 package de.borisskert.capitalcoordinatesservice.endpoint;
 
-import de.borisskert.capitalcoordinatesservice.model.CapitalWithCoordinates;
+import de.borisskert.capitalcoordinatesservice.model.CityWithLocation;
 import de.borisskert.capitalcoordinatesservice.model.CountryCode;
 import de.borisskert.capitalcoordinatesservice.service.CapitalCoordinatesService;
 import de.borisskert.capitalcoordinatesservice.validation.ValidCountryCode;
@@ -23,7 +23,7 @@ public class CoordinatesController {
     }
 
     @GetMapping(path = "/{countryCode}", produces = "application/json")
-    public CapitalWithCoordinates getCoordinates(
+    public CityWithLocation getCoordinates(
             @PathVariable("countryCode") @NotNull @ValidCountryCode String countryCode
     ) {
         return service.findBy(CountryCode.from(countryCode));

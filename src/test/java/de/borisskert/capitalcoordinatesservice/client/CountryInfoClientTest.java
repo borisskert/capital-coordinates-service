@@ -1,16 +1,18 @@
 package de.borisskert.capitalcoordinatesservice.client;
 
 import de.borisskert.capitalcoordinatesservice.ServiceApplication;
-import de.borisskert.capitalcoordinatesservice.model.CapitalCity;
+import de.borisskert.capitalcoordinatesservice.model.City;
 import de.borisskert.capitalcoordinatesservice.model.CountryCode;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(classes = ServiceApplication.class)
+@ActiveProfiles("test")
 class CountryInfoClientTest {
 
     @Autowired
@@ -18,8 +20,8 @@ class CountryInfoClientTest {
 
     @Test
     void shouldGetBerlinForGermanyCountryCode() {
-        CapitalCity capitalCity = client.getCapitalCity(new CountryCode("DE"));
-        assertEquals("Berlin", capitalCity.name());
+        City city = client.getCapitalCity(new CountryCode("DE"));
+        assertEquals("Berlin", city.name());
     }
 
     @Test

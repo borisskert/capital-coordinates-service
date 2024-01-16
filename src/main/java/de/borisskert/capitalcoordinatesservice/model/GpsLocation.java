@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public record GpsLocation(double latitude, double longitude) {
 
-    public CityLocation toCityLocation(String displayName) {
-        return new CityLocation(this, displayName);
+    public CityLocation toCityLocation(String country, String displayName) {
+        return new CityLocation(this, country, displayName);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package de.borisskert.capitalcoordinatesservice.endpoint;
 
-import de.borisskert.capitalcoordinatesservice.model.CapitalWithCoordinates;
+import de.borisskert.capitalcoordinatesservice.model.CityWithLocation;
 import de.borisskert.capitalcoordinatesservice.model.CountryCode;
 import de.borisskert.capitalcoordinatesservice.service.CapitalCoordinatesService;
 import io.restassured.RestAssured;
@@ -11,12 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@ActiveProfiles("test")
 class CoordinatesEndpointTest {
 
     @MockBean
@@ -80,7 +82,7 @@ class CoordinatesEndpointTest {
 
     private void setupServiceMock() {
         CountryCode deutschland = CountryCode.from("DE");
-        CapitalWithCoordinates berlin = new CapitalWithCoordinates(
+        CityWithLocation berlin = new CityWithLocation(
                 "Berlin",
                 52.5170365,
                 13.3888599,

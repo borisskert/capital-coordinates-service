@@ -2,7 +2,7 @@ package de.borisskert.capitalcoordinatesservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record CapitalWithCoordinates(
+public record CityWithLocation(
         String capital,
         Double latitude,
         Double longitude,

@@ -1,7 +1,7 @@
 package de.borisskert.capitalcoordinatesservice.client;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import de.borisskert.capitalcoordinatesservice.model.CapitalCity;
+import de.borisskert.capitalcoordinatesservice.model.City;
 import de.borisskert.capitalcoordinatesservice.model.CityLocation;
 import de.borisskert.capitalcoordinatesservice.model.GpsLocation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +27,15 @@ public class CityLocationClient {
         this.url = url;
     }
 
-    public CityLocation getCoordinates(CapitalCity capitalCity) {
+    public CityLocation getLocation(City city) {
         List<OpenStreetMapCityResponse> response = restClient.get()
-                .uri(url, capitalCity.name())
+                .uri(url, city.name())
                 .retrieve()
-                .body(new ParameterizedTypeReference<>() {
+                .body(new ParameterizedTypeReference<List<OpenStreetMapCityResponse>>() {
                 });
 
         if (response.isEmpty()) {
-            throw new CityNotFoundException("Could not find coordinates for capital city '" + capitalCity.name() + "'");
+            throw new CityNotFoundException("Could not find coordinates for capital city '" + city.name() + "'");
         }
 
         return response.get(0).toCityLocation();
@@ -43,22 +43,22 @@ public class CityLocationClient {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class OpenStreetMapCityResponse {
-        private final Double lat;
-        private final Double lon;
-        private final String display_name;
-
-        public OpenStreetMapCityResponse(double lat, double lon, String display_name) {
-            this.lat = lat;
-            this.lon = lon;
-            this.display_name = display_name;
-        }
+        public Double lat;
+        public Double lon;
+        public Address address;
+        public String display_name;
 
         private GpsLocation toGpsLocation() {
             return new GpsLocation(lat, lon);
         }
 
         public CityLocation toCityLocation() {
-            return new CityLocation(toGpsLocation(), display_name);
+            return new CityLocation(toGpsLocation(), address.country, display_name);
+        }
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        static class Address {
+            public String country;
         }
     }
 

@@ -1,3 +1,3 @@
 capital-coordinates-service:
   city-location-client:
-    url: "https://nominatim.openstreetmap.org/search?q={capitalCity}&format=json&limit=1"
+    url: https://nominatim.openstreetmap.org/?addressdetails=1&q={city}&format=json&limit=1&accept-language=de
