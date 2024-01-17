@@ -27,7 +27,7 @@ public class CityLocationClient {
         this.url = url;
     }
 
-    public CityLocation getLocation(City city) {
+    public CityLocation retrieveLocation(City city) {
         List<OpenStreetMapCityResponse> response = restClient.get()
                 .uri(url, city.name())
                 .retrieve()
@@ -57,7 +57,7 @@ public class CityLocationClient {
         }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
-        static class Address {
+        private static class Address {
             public String country;
         }
     }

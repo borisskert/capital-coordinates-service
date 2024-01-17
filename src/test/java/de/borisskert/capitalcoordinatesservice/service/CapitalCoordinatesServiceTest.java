@@ -31,12 +31,12 @@ class CapitalCoordinatesServiceTest {
     public void setup() {
         City berlin = City.of("Berlin");
 
-        Mockito.when(mockedCountryInfoClient.getCapitalCity(germany)).thenReturn(berlin);
+        Mockito.when(mockedCountryInfoClient.retrieveCapitalCity(germany)).thenReturn(berlin);
 
         CityLocation berlinsLocation = new GpsLocation(52.5170365, 13.3888599)
                 .toCityLocation("Germany", "Berlin, Deutschland");
 
-        Mockito.when(mockedCityLocationClient.getLocation(berlin)).thenReturn(berlinsLocation);
+        Mockito.when(mockedCityLocationClient.retrieveLocation(berlin)).thenReturn(berlinsLocation);
     }
 
     @Test

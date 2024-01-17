@@ -25,12 +25,12 @@ public class CoordinatesController {
     }
 
     @GetMapping(path = "/{countryCode}", produces = "application/json")
-    public ResponseEntity<CityWithLocation> getCoordinates(
+    public ResponseEntity<CoordinatesDto> getCoordinates(
             @PathVariable("countryCode") @NotNull @ValidCountryCode String countryCode
     ) {
         try {
             CityWithLocation cityWithLocation = service.findBy(CountryCode.from(countryCode));
-            return ResponseEntity.ok(cityWithLocation);
+            return ResponseEntity.ok(cityWithLocation.toDto());
         } catch (CountryInfoClient.CountryNotFoundException e) {
             return ResponseEntity.badRequest().build();
         }

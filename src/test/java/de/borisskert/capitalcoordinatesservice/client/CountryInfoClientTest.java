@@ -20,14 +20,14 @@ class CountryInfoClientTest {
 
     @Test
     void shouldGetBerlinForGermanyCountryCode() {
-        City city = client.getCapitalCity(new CountryCode("DE"));
+        City city = client.retrieveCapitalCity(new CountryCode("DE"));
         assertThat(city.name()).isEqualTo("Berlin");
     }
 
     @Test
     void shouldThrowWhenTryingToFindCapitalOfNotExistingCountry() {
         assertThatThrownBy(() -> {
-            client.getCapitalCity(new CountryCode("XX"));
+            client.retrieveCapitalCity(new CountryCode("XX"));
         }).isInstanceOf(CountryInfoClient.CountryNotFoundException.class);
     }
 

@@ -17,12 +17,14 @@ public class CountryInfoClient {
         this.countryInfoServiceSoapType = countryInfoServiceSoapType;
     }
 
-    public City getCapitalCity(CountryCode countryCode) {
+    public City retrieveCapitalCity(CountryCode countryCode) {
         String capitalCity = countryInfoServiceSoapType.capitalCity(countryCode.value());
 
         // SOAP service does not throw an exception nor return null when country code is not found - it returns a string
         if (capitalCity.equals(COUNTRY_NOT_FOUND)) {
-            throw new CountryNotFoundException("Could not find capital city for country code '" + countryCode.value() + "'");
+            throw new CountryNotFoundException(
+                    "Could not find capital city for country code '" + countryCode.value() + "'"
+            );
         }
 
         return new City(capitalCity);

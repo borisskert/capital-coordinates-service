@@ -21,7 +21,7 @@ class CityLocationClientTest {
 
     @Test
     void shouldRetrieveLocationForBerlin() {
-        final CityLocation location = client.getLocation(City.of("Berlin"));
+        final CityLocation location = client.retrieveLocation(City.of("Berlin"));
 
         assertThat(location.gpsLocation().latitude()).isCloseTo(52.5, offset(0.1));
         assertThat(location.gpsLocation().longitude()).isCloseTo(13.3, offset(0.1));
@@ -31,7 +31,7 @@ class CityLocationClientTest {
 
     @Test
     void shouldRetrieveLocationForZagreb() {
-        final CityLocation location = client.getLocation(City.of("Zagreb"));
+        final CityLocation location = client.retrieveLocation(City.of("Zagreb"));
 
         assertThat(location.gpsLocation().latitude()).isCloseTo(45.8, offset(0.1));
         assertThat(location.gpsLocation().longitude()).isCloseTo(15.9, offset(0.1));
@@ -45,7 +45,7 @@ class CityLocationClientTest {
     @Test
     void shouldThrowWhenCityNotFound() {
         assertThrows(CityLocationClient.CityNotFoundException.class, () -> {
-            client.getLocation(City.of("NotExistingCity"));
+            client.retrieveLocation(City.of("NotExistingCity"));
         });
     }
 }

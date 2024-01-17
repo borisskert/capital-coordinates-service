@@ -21,8 +21,8 @@ public class CapitalCoordinatesService {
     }
 
     public CityWithLocation findBy(CountryCode countryCode) {
-        City capitalCity = countryInfoClient.getCapitalCity(countryCode);
-        CityLocation cityLocation = cityLocationClient.getLocation(capitalCity);
+        City capitalCity = countryInfoClient.retrieveCapitalCity(countryCode);
+        CityLocation cityLocation = cityLocationClient.retrieveLocation(capitalCity);
 
         return capitalCity.withLocation(cityLocation);
     }
