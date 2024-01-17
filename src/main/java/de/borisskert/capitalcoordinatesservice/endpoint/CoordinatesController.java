@@ -5,6 +5,7 @@ import de.borisskert.capitalcoordinatesservice.model.CityWithLocation;
 import de.borisskert.capitalcoordinatesservice.model.CountryCode;
 import de.borisskert.capitalcoordinatesservice.service.CapitalCoordinatesService;
 import de.borisskert.capitalcoordinatesservice.validation.ValidCountryCode;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,7 @@ public class CoordinatesController {
     }
 
     @GetMapping
+    @Hidden
     public ResponseEntity<String> requireCountryCode() {
         return ResponseEntity.badRequest()
                 .body("Please provide a country code");

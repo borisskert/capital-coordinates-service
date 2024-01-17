@@ -1,3 +1,9 @@
 capital-coordinates-service:
   city-location-client:
     url: https://nominatim.openstreetmap.org/?addressdetails=1&q={city}&format=json&limit=1&accept-language=de
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
