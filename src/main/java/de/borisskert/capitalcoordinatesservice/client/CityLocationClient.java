@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
@@ -28,11 +29,17 @@ public class CityLocationClient {
     }
 
     public CityLocation retrieveLocation(City city) {
-        List<OpenStreetMapCityResponse> response = restClient.get()
-                .uri(url, city.name())
-                .retrieve()
-                .body(new ParameterizedTypeReference<List<OpenStreetMapCityResponse>>() {
-                });
+        List<OpenStreetMapCityResponse> response;
+        try {
+            response = restClient.get()
+                    .uri(url, city.name())
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<List<OpenStreetMapCityResponse>>() {
+                    });
+
+        } catch (ResourceAccessException e) {
+            throw new ServiceUnavailableException("Error occurred while trying to retrieve city location via REST. Check your Connection.", e);
+        }
 
         if (response.isEmpty()) {
             throw new CityNotFoundException("Could not find coordinates for capital city '" + city.name() + "'");
@@ -63,8 +70,14 @@ public class CityLocationClient {
     }
 
     public static class CityNotFoundException extends RuntimeException {
-        public CityNotFoundException(String message) {
+        private CityNotFoundException(String message) {
             super(message);
+        }
+    }
+
+    public static class ServiceUnavailableException extends RuntimeException {
+        private ServiceUnavailableException(String message, Throwable cause) {
+            super(message, cause);
         }
     }
 }

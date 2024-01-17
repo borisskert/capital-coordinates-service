@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/?addressdetails=1&q=Zagreb&format=json&limit=1&accept-language=de"
+  },
+
+  "response": {
+    "status": 200,
+    "body": "[{\"place_id\":54671361,\"licence\":\"Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright\",\"osm_type\":\"relation\",\"osm_id\":226224,\"lat\":\"45.8130967\",\"lon\":\"15.9772795\",\"class\":\"boundary\",\"type\":\"administrative\",\"place_rank\":12,\"importance\":0.694769776448509,\"addresstype\":\"city\",\"name\":\"Stadt Zagreb\",\"display_name\":\"Stadt Zagreb, Kroatien\",\"address\":{\"city\":\"Stadt Zagreb\",\"ISO3166-2-lvl6\":\"HR-21\",\"country\":\"Kroatien\",\"country_code\":\"hr\"},\"boundingbox\":[\"45.6139532\",\"45.9691466\",\"15.7732052\",\"16.2395548\"]}]",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

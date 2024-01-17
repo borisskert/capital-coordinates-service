@@ -1,5 +1,6 @@
 package de.borisskert.capitalcoordinatesservice.client;
 
+import com.sun.xml.ws.client.ClientTransportException;
 import de.borisskert.capitalcoordinatesservice.model.City;
 import de.borisskert.capitalcoordinatesservice.model.CountryCode;
 import org.oorsprong.webservices.websamples.countryinfo.CountryInfoServiceSoapType;
@@ -18,7 +19,12 @@ public class CountryInfoClient {
     }
 
     public City retrieveCapitalCity(CountryCode countryCode) {
-        String capitalCity = countryInfoServiceSoapType.capitalCity(countryCode.value());
+        String capitalCity;
+        try {
+            capitalCity = countryInfoServiceSoapType.capitalCity(countryCode.value());
+        } catch (ClientTransportException e) {
+            throw new ServiceUnavailableException("Error occurred while trying to retrieve capital city via SOAP. Check your Connection.", e);
+        }
 
         // SOAP service does not throw an exception nor return null when country code is not found - it returns a string
         if (capitalCity.equals(COUNTRY_NOT_FOUND)) {
@@ -31,8 +37,14 @@ public class CountryInfoClient {
     }
 
     public static class CountryNotFoundException extends RuntimeException {
-        public CountryNotFoundException(String message) {
+        private CountryNotFoundException(String message) {
             super(message);
+        }
+    }
+
+    public static class ServiceUnavailableException extends RuntimeException {
+        private ServiceUnavailableException(String message, Throwable cause) {
+            super(message, cause);
         }
     }
 }

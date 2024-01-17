@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/?addressdetails=1&q=NotExistingCity&format=json&limit=1&accept-language=de"
+  },
+  "response": {
+    "status": 200,
+    "body": "[]",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

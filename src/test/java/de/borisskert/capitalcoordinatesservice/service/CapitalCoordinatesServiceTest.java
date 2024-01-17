@@ -11,8 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.offset;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class CapitalCoordinatesServiceTest {
@@ -29,6 +27,21 @@ class CapitalCoordinatesServiceTest {
 
     @BeforeEach
     public void setup() {
+        setupMockForBerlin();
+    }
+
+    @Test
+    void shouldShouldReturnBerlinsLocationForGermanysCode() {
+        CityWithLocation cityWithLocation = service.findBy(germany);
+
+        assertThat(cityWithLocation.capital()).isEqualTo("Berlin");
+        assertThat(cityWithLocation.latitude()).isEqualTo(52.5170365);
+        assertThat(cityWithLocation.longitude()).isEqualTo(13.3888599);
+        assertThat(cityWithLocation.country()).isEqualTo("Germany");
+        assertThat(cityWithLocation.displayName()).isEqualTo("Berlin, Deutschland");
+    }
+
+    private void setupMockForBerlin() {
         City berlin = City.of("Berlin");
 
         Mockito.when(mockedCountryInfoClient.retrieveCapitalCity(germany)).thenReturn(berlin);
@@ -37,16 +50,5 @@ class CapitalCoordinatesServiceTest {
                 .toCityLocation("Germany", "Berlin, Deutschland");
 
         Mockito.when(mockedCityLocationClient.retrieveLocation(berlin)).thenReturn(berlinsLocation);
-    }
-
-    @Test
-    void shouldShouldReturnBerlinsLocationForGermanysCode() {
-        CityWithLocation cityWithLocation = service.findBy(germany);
-
-        assertThat(cityWithLocation.capital()).isEqualTo("Berlin");
-        assertThat(cityWithLocation.latitude()).isCloseTo(52.5, offset(0.1));
-        assertThat(cityWithLocation.longitude()).isEqualTo(13.3, offset(0.1));
-        assertThat(cityWithLocation.country()).isEqualTo("Germany");
-        assertThat(cityWithLocation.displayName()).isEqualTo("Berlin, Deutschland");
     }
 }

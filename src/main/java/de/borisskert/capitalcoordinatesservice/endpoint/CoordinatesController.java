@@ -1,5 +1,6 @@
 package de.borisskert.capitalcoordinatesservice.endpoint;
 
+import de.borisskert.capitalcoordinatesservice.client.CityLocationClient;
 import de.borisskert.capitalcoordinatesservice.client.CountryInfoClient;
 import de.borisskert.capitalcoordinatesservice.model.CityWithLocation;
 import de.borisskert.capitalcoordinatesservice.model.CountryCode;
@@ -33,6 +34,8 @@ public class CoordinatesController {
             return ResponseEntity.ok(cityWithLocation.toDto());
         } catch (CountryInfoClient.CountryNotFoundException e) {
             return ResponseEntity.badRequest().build();
+        } catch (CountryInfoClient.ServiceUnavailableException | CityLocationClient.ServiceUnavailableException e) {
+            return ResponseEntity.status(503).build();
         }
     }
 
