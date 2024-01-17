@@ -21,4 +21,4 @@ jobs:
           java-version: 17
 
       - name: Build package
-        run: ./mvnw -Pci -B verify
+        run: ./mvnw -B verify
